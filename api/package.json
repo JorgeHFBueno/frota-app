@@ -1,0 +1,13 @@
+{
+    "name": "frota-api",
+    "type": "module",
+    "scripts": {
+      "start": "node src/index.js"
+    },
+    "dependencies": {
+      "cors": "^2",
+      "express": "^4",
+      "pg": "^8"
+    }
+  }
+  
