@@ -17,6 +17,7 @@ export default function Menu() {
         <Link href="/" className="navbar-brand">
           Frota App
         </Link>
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
@@ -24,31 +25,31 @@ export default function Menu() {
               Home
             </Link>
 
-            {session && (
-              <NavDropdown title="Atividades" id="basic-nav-dropdown">
-                <NavDropdown.Item as={Link} href="/privado/atividades/geral">
-                 Geral
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/privado/atividades/meus-registros">
-                 Meus Registros
-               </NavDropdown.Item>
-                <NavDropdown.Item as={Link} href="/privado/atividades/registrar">
-                 Registrar
-               </NavDropdown.Item>
-              </NavDropdown>
-            )}
+            {/* dropdown visível para todos */}
+            <NavDropdown title="Atividades" id="atividades-dropdown">
+              <NavDropdown.Item as={Link} href="/privado/atividades/geral">
+                Geral
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} href="/privado/atividades/meus-registros">
+                Meus Registros
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} href="/privado/atividades/registrar">
+                Registrar
+              </NavDropdown.Item>
+            </NavDropdown>
 
-            <Link href="/sobre" className="nav-link active">
+            <Link href="/sobre" className="nav-link">
               Sobre
             </Link>
           </Nav>
         </Navbar.Collapse>
 
+        {/* Login opcional */}
         <Navbar.Collapse className="justify-content-end">
           <NavDropdown
-            title={session ? `Autenticado como: ${session.user.name}` : 'Login'}
-            id="basic-nav-dropdown"
-          >            
+            title={session ? `Autenticado: ${session.user.name}` : 'Login'}
+            id="auth-dropdown"
+          >
             {!session && (
               <NavDropdown.Item as={Link} href="/login">
                 Login
@@ -56,10 +57,13 @@ export default function Menu() {
             )}
             {session && (
               <>
-                <Link href="/privado/usuarios" className="dropdown-item">
+                <NavDropdown.Item as={Link} href="/privado/usuarios">
                   Meus Dados
-                </Link>
-                <NavDropdown.Item as="button" onClick={() => signOut({ callbackUrl: '/' })}>
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  as="button"
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                >
                   Logout
                 </NavDropdown.Item>
               </>
