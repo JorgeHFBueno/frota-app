@@ -1,10 +1,18 @@
 import { pool } from '../config.js';
 
-export async function listAtividades(motoristaId) {
-  const res = await pool.query(
-    'SELECT * FROM atividades WHERE motorista=$1 ORDER BY data DESC',[motoristaId]
+export async function listAtividades(motorista) {
+  if (motorista) {
+    const { rows } = await pool.query(
+      'SELECT * FROM atividades WHERE motorista = $1 ORDER BY data DESC',
+      [motorista]
+    );
+    return rows;
+  }
+  // lista geral
+  const { rows } = await pool.query(
+    'SELECT * FROM atividades ORDER BY data DESC'
   );
-  return res.rows;
+  return rows;
 }
 
 export async function getAtividadeById(id) {
