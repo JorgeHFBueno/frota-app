@@ -11,7 +11,7 @@ export default function RegisterPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, email, senha })

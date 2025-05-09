@@ -2,12 +2,14 @@
 import express from 'express';
 import cors from 'cors';
 import { pool } from './bd/config.js';
+import authRoutes from './routes/auth.js';
 import atividadesRoutes from './routes/atividades.js';
 import caminhoesRoutes from './routes/caminhoes.js';
 
 const app = express();
 app.use(cors());          // libera chamadas do domínio front
 app.use(express.json());
+app.use('/auth', authRoutes);
 app.use('/atividades', atividadesRoutes);
 app.use('/caminhoes', caminhoesRoutes);
 
