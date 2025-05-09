@@ -13,7 +13,7 @@ export default function MeusRegistrosPage() {
 
   // carrega registros do usuário
   async function load() {
-    const res = await fetch('/api/atividades')   // já devolve apenas do user logado
+    const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/atividades')   // já devolve apenas do user logado
     const data = await res.json()
     setAtividades(data)
   }
@@ -22,7 +22,7 @@ export default function MeusRegistrosPage() {
   // DELETE
   async function handleDelete(id) {
     if (!confirm('Excluir registro?')) return
-    await fetch(`/api/atividades/${id}`, { method: 'DELETE' })
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/atividades/${id}`, { method: 'DELETE' })
     load()                 // recarrega lista
   }
 

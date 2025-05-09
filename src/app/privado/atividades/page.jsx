@@ -11,7 +11,7 @@ export default function AtividadesPage() {
   const [atividades, setAtividades] = useState([]);
 
   useEffect(() => {
-    fetch('/api/atividades')
+    fetch('${process.env.NEXT_PUBLIC_API_URL}/atividades')
       .then(res => res.json())
       .then(data => setAtividades(data));
   }, []);

@@ -1,4 +1,4 @@
-import { pool }     from "@/bd/config"
+//import { pool }     from "@/bd/config"
 import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth/next"
 import { authOptions }     from "@/auth/auth"

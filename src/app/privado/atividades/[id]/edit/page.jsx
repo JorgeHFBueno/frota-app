@@ -21,7 +21,7 @@ export default function EditAtividadePage() {
   // carregamento inicial
   useEffect(() => {
     async function fetchAtividade() {
-      const res = await fetch(`/api/atividades/${id}`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/atividades/${id}`)
       if (!res.ok) {
         alert('Registro não encontrado')
         return router.push('/privado/meus-registros')

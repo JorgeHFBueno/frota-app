@@ -1,5 +1,5 @@
 // src/app/page.jsx
-import { pool } from '@/bd/config';
+//import { pool } from '@/bd/config';
 
 export default async function HomePage() {
   // busca direto no servidor
