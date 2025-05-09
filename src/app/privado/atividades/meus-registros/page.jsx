@@ -1,60 +1,59 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useSession }          from 'next-auth/react'
-import { useRouter }           from 'next/navigation'
-import Link                    from 'next/link'
-import { Table, Button, Container } from 'react-bootstrap'
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Button, Table, Spinner } from 'react-bootstrap';
 
 export default function MeusRegistrosPage() {
-  const { data: session } = useSession({ required: true })
-  const router = useRouter()
-  const [atividades, setAtividades] = useState([])
+  const { data: session } = useSession();
+  const [atividades, setAtividades] = useState(null);
 
-  // carrega registros do usuário
-  async function load() {
-    const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/atividades')   // já devolve apenas do user logado
-    const data = await res.json()
-    setAtividades(data)
-  }
-  useEffect(() => { load() }, [])
+  // carrega lista
+  useEffect(() => {
+    const email = session?.user?.email;
+    const url = email
+      ? `${process.env.NEXT_PUBLIC_API_URL}/atividades?motorista=${email}`
+      : `${process.env.NEXT_PUBLIC_API_URL}/atividades`;
 
-  // DELETE
+    fetch(url)
+      .then(r => r.json())
+      .then(setAtividades);
+  }, [session]);
+
   async function handleDelete(id) {
-    if (!confirm('Excluir registro?')) return
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/atividades/${id}`, { method: 'DELETE' })
-    load()                 // recarrega lista
+    if (!confirm('Excluir atividade?')) return;
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/atividades/${id}`,
+      { method: 'DELETE' }
+    );
+    setAtividades(cur => cur.filter(a => a.id !== id));
   }
+
+  if (!atividades) return <Spinner animation="border" className="m-3" />;
 
   return (
-    <Container className="mt-4">
-      <h1>Meus Registros</h1>
-      <Table striped responsive>
+    <div className="container mt-4">
+      <h2>Minhas Atividades</h2>
+
+      <Table striped>
         <thead>
           <tr>
-            <th>Data</th><th>Destino</th><th>KM</th><th>Motivo</th>
-            <th>Placa</th><th>Tipo</th><th>Ações</th>
+            <th>ID</th><th>Data</th><th>Destino</th>
+            <th>Placa</th><th>Tipo</th><th />
           </tr>
         </thead>
         <tbody>
           {atividades.map(a => (
             <tr key={a.id}>
+              <td>{a.id}</td>
               <td>{new Date(a.data).toLocaleDateString()}</td>
               <td>{a.destino}</td>
-              <td>{a.km}</td>
-              <td>{a.motivo}</td>
               <td>{a.placa}</td>
               <td>{a.tipo}</td>
-              <td style={{ whiteSpace: 'nowrap' }}>
-                <Link
-                  href={`/privado/atividades/${a.id}/edit`}
-                  className="btn btn-sm btn-outline-primary me-2"
-                >
-                  Editar
-                </Link>
+              <td>
                 <Button
                   size="sm"
-                  variant="outline-danger"
+                  variant="danger"
                   onClick={() => handleDelete(a.id)}
                 >
                   Excluir
@@ -64,6 +63,6 @@ export default function MeusRegistrosPage() {
           ))}
         </tbody>
       </Table>
-    </Container>
-  )
+    </div>
+  );
 }
