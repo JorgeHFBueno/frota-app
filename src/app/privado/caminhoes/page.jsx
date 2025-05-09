@@ -1,11 +1,38 @@
-export const dynamic = 'force-dynamic';
+// src/app/privado/caminhoes/page.jsx
+'use client';
 
-export default async function CaminhoesPage() {
-  const resp = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/caminhoes`,
-    { cache: 'no-store' }
-  );
-  const caminhoes = await resp.json();
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button, Spinner } from 'react-bootstrap';
+
+export default function CaminhoesPage() {
+  const [caminhoes, setCaminhoes] = useState(null);
+  const router = useRouter();
+
+  // carrega lista ao montar o componente
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/caminhoes`)
+      .then(r => r.json())
+      .then(setCaminhoes);
+  }, []);
+
+  // excluir caminhão
+  async function handleDelete(placa) {
+    if (!confirm('Excluir caminhão?')) return;
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/caminhoes/${placa}`,
+      { method: 'DELETE' }
+    );
+    setCaminhoes(cur => cur.filter(c => c.placa !== placa));
+  }
+
+  if (!caminhoes) {
+    return (
+      <div className="container mt-4">
+        <Spinner animation="border" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-4">
@@ -18,7 +45,10 @@ export default async function CaminhoesPage() {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Placa</th><th>Modelo</th><th>Ano</th><th />
+            <th>Placa</th>
+            <th>Modelo</th>
+            <th>Ano</th>
+            <th style={{ width: 160 }} />
           </tr>
         </thead>
         <tbody>
@@ -28,12 +58,23 @@ export default async function CaminhoesPage() {
               <td>{c.modelo}</td>
               <td>{c.ano}</td>
               <td>
-                <a
-                  className="btn btn-sm btn-outline-secondary"
-                  href={`/privado/caminhoes/${c.placa}/edit`}
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  className="me-2"
+                  onClick={() =>
+                    router.push(`/privado/caminhoes/${c.placa}/edit`)
+                  }
                 >
                   Editar
-                </a>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handleDelete(c.placa)}
+                >
+                  Excluir
+                </Button>
               </td>
             </tr>
           ))}

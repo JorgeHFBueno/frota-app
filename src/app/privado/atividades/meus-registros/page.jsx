@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button, Table, Spinner } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
 export default function MeusRegistrosPage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [atividades, setAtividades] = useState(null);
 
@@ -57,6 +59,15 @@ export default function MeusRegistrosPage() {
                   onClick={() => handleDelete(a.id)}
                 >
                   Excluir
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() =>
+                    router.push(`/privado/atividades/${a.id}/edit`)
+                  }
+                >
+                  Editar
                 </Button>
               </td>
             </tr>
