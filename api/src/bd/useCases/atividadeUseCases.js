@@ -1,4 +1,4 @@
-import { pool } from '../../../../src/bd/config';
+import { pool } from '../config.js';
 
 export async function listAtividades(motoristaId) {
   const res = await pool.query(
