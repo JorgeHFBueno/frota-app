@@ -1,10 +1,13 @@
 // src/app/page.jsx
-//import { pool } from '@/bd/config';
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  // busca direto no servidor
-  const res = await pool.query('SELECT * FROM atividades ORDER BY data DESC');
-  const atividades = res.rows;
+  // busca via API externa
+  const resp = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/atividades`,
+    { cache: 'no-store' }
+  );
+  const atividades = await resp.json();
 
   return (
     <div className="container mt-4">
