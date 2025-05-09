@@ -1,34 +1,30 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { signIn }   from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Form, Button, Container } from 'react-bootstrap'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const router = useRouter()
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     const res = await signIn('credentials', {
       email,
       senha,
-      redirect: false,
-      callbackUrl
-    });
-    if (res?.ok) router.push(res.url || '/');
-    else setError('Credenciais inválidas');
+      redirect: false
+    })
+    if (res.ok) router.push('/privado/atividades')
+    else alert('Credenciais inválidas')
   }
 
   return (
-    <Container className="mt-5" style={{ maxWidth: 400 }}>
+    <Container className="mt-5" style={{ maxWidth: '400px' }}>
       <h2>Login</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
@@ -48,11 +44,17 @@ export default function LoginPage() {
             required
           />
         </Form.Group>
-        <Button type="submit" className="w-100">Entrar</Button>
+        <Button type="submit" className="w-100 mb-2">
+          Entrar
+        </Button>
       </Form>
-      <p className="mt-3 text-center">
-        Não tem conta? <a href="/registro">Criar usuário</a>
-      </p>
+
+      <div className="text-center">
+        <span>Não tem conta? </span>
+        <Link href="/registro">
+          <Button variant="link">Criar usuário</Button>
+        </Link>
+      </div>
     </Container>
-  );
+  )
 }
