@@ -36,6 +36,14 @@ export default function Menu() {
               <NavDropdown.Item as={Link} href="/privado/atividades/registrar">
                 Registrar
               </NavDropdown.Item>
+              <NavDropdown title="Caminhões" id="caminhoes-dropdown">
+                <NavDropdown.Item as={Link} href="/privado/caminhoes">
+                  Lista
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} href="/privado/caminhoes/registrar">
+                  Registrar
+                </NavDropdown.Item>
+              </NavDropdown>
             </NavDropdown>
 
             <Link href="/sobre" className="nav-link">
