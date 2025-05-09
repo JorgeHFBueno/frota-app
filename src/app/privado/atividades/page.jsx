@@ -30,8 +30,7 @@ export default function RegistrarPage() {
       motorista: session?.user?.email || null
     };
 
-    const res = await fetch(
-      '${process.env.NEXT_PUBLIC_API_URL}/atividades',
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/atividades`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -17,7 +17,7 @@ export default function RegistrarPage() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    const res = await fetch('${process.env.NEXT_PUBLIC_API_URL}/atividades', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/atividades`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
